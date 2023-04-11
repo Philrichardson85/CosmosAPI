@@ -67,13 +67,16 @@ namespace CosmosTests
         public async Task CosmosService_PutNotes()
         {
             // Arrange
-            Note note = new Note { Id = "5678", DateCreated = DateTime.Now, Tags = new List<string> { "1", "1", "1" }, Text = "test1 text" };
-
+            Random random = new Random();
+            int randomNumber = random.Next(200);
+            Note note = new Note { Id = "5678", DateCreated = DateTime.Now, Tags = new List<string> { "1", "2", "3" }, Text = $"test{randomNumber} text" };
+            var old_note = await _cosmosService.GetNoteById(note.Id);
             // Act
             var resp = await _cosmosService.PutNote(note);
 
             // Assert
             Assert.AreEqual(note.Id, resp.Id);
+            Assert.AreNotEqual(old_note.Text, resp.Text,"Text changed");
             Assert.IsInstanceOf<Note>(resp);
         }
         [Test]

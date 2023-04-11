@@ -66,9 +66,9 @@ namespace CosmosAPI.Services
             var partitionKeyValue = id;
             var noteId = id;
 
-            ItemResponse<Note> wakefieldFamilyResponse = await this.container.DeleteItemAsync<Note>(noteId, new Microsoft.Azure.Cosmos.PartitionKey(partitionKeyValue));
-            Console.WriteLine("Deleted Family [{0},{1}]\n", partitionKeyValue, noteId);
-            return $"Deleted Family [{partitionKeyValue},{noteId}]\n";
+            ItemResponse<Note> noteResponse = await this.container.DeleteItemAsync<Note>(noteId, new Microsoft.Azure.Cosmos.PartitionKey(partitionKeyValue));
+            Console.WriteLine("Deleted Note [{0},{1}]\n", partitionKeyValue, noteId);
+            return $"Deleted Note [{partitionKeyValue},{noteId}]\n";
         }
 
         async Task<Note> ICosmosService.PostNote(Note post_note)
@@ -99,7 +99,7 @@ namespace CosmosAPI.Services
             itemBody.Tags = put_note.Tags;
 
             noteResponse = await this.container.ReplaceItemAsync<Note>(itemBody, itemBody.Id, new Microsoft.Azure.Cosmos.PartitionKey(itemBody.Id));
-            Console.WriteLine("Updated Family [{0},{1}].\n \tBody is now: {2}\n", itemBody.Id, itemBody.Id, noteResponse.Resource);
+            Console.WriteLine("Updated Note [{0},{1}].\n \tBody is now: {2}\n", itemBody.Id, itemBody.Id, noteResponse.Resource.Text);
 
             return noteResponse.Resource;
         }
