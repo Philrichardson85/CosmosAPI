@@ -106,7 +106,7 @@ namespace CosmosTests
             var resp = await _cosmosService.DeleteNote(note.Id);
 
             // Assert
-            Assert.AreEqual($"Deleted Family [{note.Id},{note.Id}]\n", resp);
+            Assert.AreEqual($"Deleted Note [{note.Id},{note.Id}]\n", resp);
             Assert.IsInstanceOf<string>(resp);
         }
     }
