@@ -1,3 +1,7 @@
+using CosmosAPI.Models;
+using CosmosAPI.Services;
+using Microsoft.AspNetCore.OData;
+
 namespace CosmosAPI
 {
     public class Program
@@ -8,7 +12,16 @@ namespace CosmosAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddOData(options =>
+            options.Select().Filter().OrderBy()
+            );
+            builder.Services.AddTransient<ICosmosService, CosmosService>();
+
+            var config = new ConfigurationBuilder()
+                            .AddJsonFile("appSettings.json")
+                            .Build();
+            builder.Services.Configure<ConnectionStringsSection>(config.GetSection("ConnectionStrings"));
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -25,7 +38,6 @@ namespace CosmosAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
